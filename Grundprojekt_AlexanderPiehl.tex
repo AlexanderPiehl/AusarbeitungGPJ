@@ -37,7 +37,7 @@ Bei der Microservice Architektur unterteilt sich die Anwendung in mehrere kleine
   \centering
       \includegraphics[width=0.7\textwidth]{monolithMicroservice.PNG}
     \caption{Gegenüberstellung monolithische Anwendung und Microservice \cite{locloud}}
-    \label{fig:PyramideGoogle}
+    \label{fig:MonolithMicroservice}
 \end{figure}
 
 Bei einer monolithischen Anwendung befinden sich alle einzelnen Komponenten in einer gemeinsamen großen Anwendung. Am Beispiel MARS wäre in dieser Anwendung unter anderem die Benutzerverwaltung, Projektverwaltung und der Datenimport sowie die GUI enthalten. Bei der Microservice Architektur werden diese Komponenten in eigenständige Programme bzw. Services ausgelagert
@@ -280,18 +280,10 @@ Da die einzelnen Testfälle alle hintereinander ablaufen müssen, befinden sich 
 Daher werden in dieser Methode alle Testfälle aufgerufen, damit die Reihenfolge bestimmt werden kann. Für das Überprüfen der Ergebnisse wird die Methode assertEquals() von JUNit verwendet. Die bekommt als erstes Argument den IST-Wert und als zweites den SOLL-Wert übergeben. Wenn beide Werte übereinstimmen gilt der Testfall als erfolgreich.
 
 \subsection{Recherche Teststrategien}
-Als Vorbereitung für das nachfolgende Hauptprojekt wurde nach Teststrategien gesucht, welche sich für eine Microservice-Anwendung eignen könnten. Dabei wurden zwei verschiedenen Ansätze gefunden. Der erste Ansatz ist die von Martin Fowler entworfene Teststrategie für Microservices \cite|{Fowler2014testing}. Der zweite Ansatz ist die von Google entwickelte Teststrategie \cite|{whittaker2012google}. In den nächsten beiden Abschnitten werden die einzelnen Ansätze ausführlicher vorgestellt.
+Als Vorbereitung für das nachfolgende Hauptprojekt wurde nach Teststrategien gesucht, welche sich für eine Microservice-Anwendung eignen könnten. Dabei wurden zwei verschiedene Ansätze gefunden. Der erste Ansatz ist die von Martin Fowler entworfene Teststrategie für Microservices \cite{Fowler2014testing}. Der zweite Ansatz ist die von Google entwickelte Teststrategie \cite{whittaker2012google}. Beide Teststrategien werden in den nächsten beiden Abschnitten kurz erläutert. Eine ausführlicher Vorstellung der beiden Teststrategien wurden in der Ausarbeitung zum Hauptseminar vorgenommen.
 
 \subsubsection{Teststrategie von Martin Fowler}
-Martin Fowler hat eine Teststrategie explizit für Microservice entwickelt, welche man nach seiner Empfehlung nutzen sollte, wenn man eine Microservice Anwendung testen möchte. Dafür teilt er die Tests in verschiedene Bereiche ein. In der Abbildung 2 \label{fig:PyramideFowler} ist die Teststrategie von Martin Fowler in Form einer Pyramide dargestellt. Daran erkennt man, dass er die Tests in fünf Testarten unterteilt. Zudem kann man aus der Pyramide herauslesen, wie viele Tests von der Testart im Vergleich zu den anderen Testarten durchgeführt werden sollen. Je weiter unten sich eine Testart befindet, umso mehr Tests sollen durchgeführt werden. Darauf folgt, dass am meisten Unit-Test durchgeführt werden sollen. Was sich Martin Fowler unter den einzelnen Testarten vorstellt, soll in der folgenden Auflistung kurz erläutert werden \cite{Fowler2014testing} :
-. 
-\begin{itemize}
-\item \textbf{Unit:} Fowler versteht unter Unit-Test das Testen einer einzelnen Funktion oder Moduls innerhalb eines Services \cite{Fowler2014testing}.
-\item \textbf{Integration:} Unter Integration soll getestet werden, ob die Zusammenarbeit der Services mit seinen externen Komponenten funktioniert. Jeder Service hat eine HTTP-Schnittstelle, um mit den anderen Services kommunizieren zu können und teilweise noch dazu eine eigene Datenbank. Diese externen Komponenten sollen hier getestet werden. Es geht dabei nicht darum, ob der Service mit anderen Services korrekt funktioniert \cite{Fowler2014testing}.
-\item \textbf{Component:} Auf der Komponenten-Ebene bzw. Service-Ebene soll der Service an sich getestet werden. Daher wird hier getestet, ob der Service seine Aufgabe wie z.B. den Datenimport korrekt erfüllt. Es wird auf dieser Ebene das Gesamtverhalten des Services getestet. Zusätzlich findet auf dieser Ebene das Testen der Schnittstelle statt, um zu prüfen, ob sie formal korrekt ist \cite{Fowler2014testing}.
-\item \textbf{End-to-End:} Auf der Ebene soll das komplette Programm einmal von Anfang bis Ende durch getestet werden. Als Tester muss dieser selbst definieren, wo der Anfang und das Ende liegt. Am Beispiel MARS wäre der Anfang das Anmelden an der Web-Oberfläche und das Ende nachdem die Modelle geladen worden sind. Das End-to-End Testen kann durchaus in ein GUI-Test übergehen \cite{Fowler2014testing}.
-\item \textbf{Exploratory:} Auf der obersten Ebene der Test Pyramide von Fowler steht das explorative Testen. Dabei geht es darum, dass sich jemand manuell mit der Anwendung auseinandersetzt und versucht das Programm in einen Fehlerzustand zu bringen. Dies wird meist über verschiedene Aktionen und Eingaben über die GUI probiert \cite{Fowler2014testing}.
-\end{itemize}
+Die von Martin Fowler entwickelte Teststrategie ist explizit auf Microservice ausgelegt. In seiner Teststrategie werden die Tests in verschiedene Bereich unterteilt. Die Unterteilung der Tests ist in der Abbildung \ref{fig:PyramideFowler} auf Seite \pageref{fig:PyramideFowler} dargestellt. Die einzelnen Testebenen bauen aufeinander auf. Zudem sollen mehr Tests einer Ebene durchgeführt werden, umso weiter unten sie sich in der Pyramide befindet. 
 
 \begin{figure}[htbp]
   \centering
@@ -299,23 +291,20 @@ Martin Fowler hat eine Teststrategie explizit für Microservice entwickelt, welc
     \caption{Test Pyramide von Martin Fowler}
     \label{fig:PyramideFowler}
 \end{figure}
+
+In der untersten Ebene der Unit-Tests sollen einzelne Funktionen eines Services getestet werden. Auf der Ebene darüber der Integration-Tests sollen die einzelnen Komponenten eines Services getestet werden. Dies beinhaltet auch den Test mit externen Komponenten eines Services wie z.B. Datenbanken. Auf diese Tests sollen die Komponenten-Tests folgen. Dabei wird getestet, ob der Service seine Anforderungen erfüllt. Nach diesen Tests soll das komplette Programm von Anfang bis Ende getestet werden. Dabei können die Tests auf dieser Ebene in Form eines GUI-Tests vorliegen. Zum Abschluss soll ein exploratives Testen der Anwendung stattfinden.
+
 \subsubsection{Teststrategie von Google}
-Die Teststrategie von Google ist keine Strategie explizit für Microservices, sondern eine generelle Teststrategie für die Produkte von Google. Dabei teilt Google seine einzelnen Tests sehr abstrakt und grob in drei Kategorien ein. Auch Google stellt seine Strategie mithilfe einer Pyramide dar, siehe Abbildung 3. Aus dieser Pyramide lassen sich die drei einzelnen Tests ablesen und zwar: 'Small Test', 'Medium Test' und 'Large Test'.
+Die Teststrategie von Google verwendet eine andere Aufteilung der Tests. Sie ist zum einem nicht explizit auf Microservices festgelegt und zum anderen ist die Einteilung der einzelnen Tests allgemeiner. Die hier vorgestellte Teststrategie ist die generelle Teststrategie von Google. Auch die Teststrategie von Google ist in Form einer Pyramide abgebildet. Die dazugehörige Abbildung \ref{fig:PyramideGoogle} ist auf Seite \pageref{fig:PyramideGoogle} abgebildet. Wie man der Abbildung gut entnehmen kann, teilt Google seine Tests in drei Ebenen ein und zwar in Small Tests, Medium Tests und Large Tests.
 
-Ähnlich wie bei Fowler spielt auch hier die Position der Ebene eine Rolle. Je weiter unten sich eine Ebene befindet, umso mehr Test sollen davon ausgeführt werden. Das heißt von den Small Tests sollen die meisten durchgeführt werden. Zusätzlich gilt, je weiter unten die Ebene ist, umso isolierter sind die Tests und umso geringer sind die Ausführungsgeschwindigkeiten. Mit jeder Ebene mit der man nach oben geht, soll das Vertrauen in die Anwendung erhöht werden. Wie beim Ansatz von Fowler sollen auch hier die einzelnen Tests kurz in einer Auflistung erläutert werden \cite{whittaker2012google}.
-
-\begin{itemize}
-\item \textbf{Small Tests:} Wie der Name schon verrät sind hiermit die kleinsten Tests gemeint, welche sehr isoliert stattfinden sollen. Dazu sollen sie eine sehr geringe Ausführungsgeschwindigkeit haben, die im Millisekundenbereich liegen. Mit Small Tests sollen einzelne Funktion und Module getestet werden \cite{whittaker2012google}.
-\item \textbf{Medium Tests:} Mit den Medium Tests sollen sogenannte Nachbar-Funktionen getestet werden. Darunter versteht Google ein Submodul von Funktionen, welche sich nacheinander und/oder gegenseitig aufrufen. Diese Tests sind nicht so schnell wie Small Tests. Die Ausführungsgeschwindigkeit soll dabei aber geringer sein als eine Sekunde. Dazu sind die Tests nicht so isoliert wie Small Tests und können auch externe Komponenten verwenden, die auf dieser Ebene nicht mehr durch ein Mock ersetzt werden sollen \cite{whittaker2012google}.
-\item \textbf{Large Tests:} Die Large Tests haben die Aufgabe die komplette Anwendung oder Submodule davon zu testen. Dabei wird keine konkrete Ausführungs-
-geschwindigkeit vorgegeben, sondern ist nur mit 'so schnell wie möglich' definiert. Dazu soll auf dieser Ebene verstärkt auf reelle externe Komponenten zurückgegriffen werden und weniger Mocks eingesetzt werden, als es bei Medium Tests der Fall ist \cite{whittaker2012google}.
-\end{itemize}
 \begin{figure}[htbp]
   \centering
       \includegraphics[width=0.7\textwidth]{./Images/GooglePyramide.PNG}
     \caption{Test Pyramide von Google}
     \label{fig:PyramideGoogle}
 \end{figure}
+
+Die Einteilung der einzelnen Tests bei Google wird anhand verschiedener Kriterien wie, z.B. Aufwand und Ausführungsgeschwindigkeit bestimmt. Die Small Tests sollen den geringsten Aufwand und die geringste Ausführungsgeschwindigkeit haben. Der Aufwand und die Ausführungsgeschwindigkeit sollen mit jeder Ebene nach oben steigen. Zeitgleich sollen die Anzahl der einzelnen Tests der Ebene sinken. Das Vertrauen in die Software soll mit jedem Aufstieg auf eine höhere Ebene gesteigert werden.
 
 \subsection{Fazit Grundprojekt}
 Abschließend für das Grundprojekt kann man sagen, dass die grundlegende Arbeit erfolgt ist. Es wurde eine Testumgebung aufgebaut, mit der man experimentieren kann. Zudem erfolgte einer Einarbeitung in MARS und eine damit verbundene erste Analyse. Zudem wurden die Herausforderungen für das Testen von Microservice und speziell für MARS ausgearbeitet. Dazu wurden auch erste Systemtests mit dem Framework Selenium umgesetzt.
